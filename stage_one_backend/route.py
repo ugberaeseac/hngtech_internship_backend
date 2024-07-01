@@ -12,7 +12,6 @@ import requests
 from flask import request, jsonify, abort
 from app import app
 from datetime import datetime
-from collections import OrderedDict
 
 
 def get_visitor_ip():
@@ -33,7 +32,7 @@ def get_ip_location(ip):
     Get the location of the IP address
     """
     location = []
-    ip = "191.96.227.23"
+    #ip = "191.96.227.23"
     url = f'http://ip-api.com/json/{ip}'
     response = requests.get(url).json()
     if response.get('status') == 'success':
@@ -64,7 +63,7 @@ def home():
     return ('<h1> Hello World!</h1>')
 
 
-@app.route('/api/hello', methods=['GET'])
+@app.route('/api/hello', methods=['GET'], strict_slashes=False)
 def hello():
     """
     Create a JSON response that includes the
