@@ -14,14 +14,14 @@ class User(db.Model):
     creates a User class which maps to the users table
     """
     __tablename__ == 'users'
-    userId = db.Column(db.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True)
+    userId = db.Column(db.String(120), primary_key=True, default=lambda: str(uuid.uuid4()), unique=True)
     firstName = db.Column(db.String(60), nullabl=False)
     lastName = db.Column(db.String(60), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
     password = db.Column(db.String(120), nullable=False)
     phone = db.Column(db.String(20))
 
-    organisation = db.relationship('Organisation', secondary='user_org', backref='user', cascade='all delete-orphan') 
+    organisation = db.relationship('Organisation', secondary='user_organisation', backref='users', cascade='all delete-orphan') 
     
     def __repr__(self):
         """

@@ -12,8 +12,8 @@ from server.models import User
 
 
 user_organisations = db.Table('user_orginisations',
-        db.Column('user_id', UUID(as_uuid=True), db.ForeignKey('user.userId'), primary_key=True),
-        db.Column('organisation_id', UUID(as_uuid=True), db.ForeignKey('organisation.orgId'), primary_key=True):w:wi
+        db.Column('user_id', db.String(120), db.ForeignKey('user.userId'), primary_key=True),
+        db.Column('organisation_id', db.String(120), db.ForeignKey('organisation.orgId'), primary_key=True)
         )
 
 
@@ -23,7 +23,7 @@ class Organisation(db.Model):
     to the organisation table
     """
     __tablename__ == 'organisation'
-    orgId = db.Column(UUID(as_uuid=True, primary_key=True, default=uuid.uuid4, unique=True))
+    orgId = db.Column(db.String(120), primary_key=True, default=lambda: str(uuid.uuid4()), unique=True)
     name = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(120))
     
