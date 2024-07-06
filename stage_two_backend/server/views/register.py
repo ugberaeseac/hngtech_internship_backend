@@ -56,24 +56,31 @@ def register():
                     )
     new_user.organisation.append(new_organisation)
 
-    db.session.add(new_user)
-    db.session.add(new_organisation)
-    db.session.commit()
+    try:
+        db.session.add(new_user)
+        db.session.add(new_organisation)
+        db.session.commit()
 
-    access_token = create_user_token(identity=new_user.userId)
+        access_token = create_user_token(identity=new_user.userId)
 
-    return jsonify({
-        "status": "success",
-        "message": "Registration successful",
-        "data": {
-        "accessToken": access_token,
-        "user": {
-	    "userId": new_user.userId,
-	    "firstName": new_user.firstName,
-		"lastName": new_user.lastName,
-		"email": new_user.email,
-		"phone": new_user.phone,
-        }
-      }
-    }), 201
+        return jsonify({
+            'status': 'success',
+            'message': 'Registration successful',
+            'data': {
+            'accessToken': access_token,
+            'user': {
+    	    'userId': new_user.userId,
+	        'firstName': new_user.firstName,
+    		'lastName': new_user.lastName,
+	    	'email': new_user.email,
+		    'phone': new_user.phone,
+            }
+          }
+        }), 201
+    except Exception:
+        return jsonify({
+            'status': 'Bad request',
+            'message': 'Registration unsuccessful',
+            'statusCode': 400
+            }), 400
 
