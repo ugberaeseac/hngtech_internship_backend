@@ -1,19 +1,18 @@
 #!/usr/bin/python3
 """
-API endpoint route to authenticate a user
+endpoint route to authenticate a user
 Authenticates a user and creates a JWT token
 if successful, returns the user id and access token else
 displays an incorrect username/password message
 """
 
-from server import db, bcrypt
+from server import app, db, bcrypt
 from server.models import User
-from server.views import app_views
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token
 
 
-@app_views('/auth/login', methods=['POST'], strict_slashes=False)
+@app.route('/auth/login', methods=['POST'], strict_slashes=False)
 def login():
     """
     authenticates and log in an authorized user

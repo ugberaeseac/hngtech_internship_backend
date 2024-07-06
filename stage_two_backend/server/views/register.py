@@ -1,17 +1,17 @@
 #!/usr/bin/python3
 """
-registration/signup API view
+endpoint route for registration/signup
 creates a new user
 return payload if success else error
 """
 
-from server import db, bcrypt
+from server import app, db, bcrypt
 from server.models import User, Organisation
-from server.views import app_views
-from flask import request, jsonify, abort
+from flask import request, jsonify
+from flask_jwt_extended import create_access_token
 
 
-@app_views('auth/register', methods=['POST'], strict_slashes=False)
+@app.route('auth/register', methods=['POST'], strict_slashes=False)
 def register():
     """
     creates a new user
