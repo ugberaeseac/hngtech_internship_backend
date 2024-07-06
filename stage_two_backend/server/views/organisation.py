@@ -55,3 +55,42 @@ def get_user(user_id):
             }
         }), 200
 
+
+@app_views.route('/organisations', methods=[], strict_slashes=False)
+@jwt_required()
+def get_organisation():
+    """
+    Gets the organisation(s) a user belongs to
+    """
+    current_user_id = get_jwt_identity()
+    
+    user = User.query.filter_by(userId=current_user_id).first()
+    if not user:
+        return jsonify({
+            'status': 'Bad request',
+            'message': 'Access denied',
+            'statusCode': 401
+            }), 401
+
+    organisation_data = []
+    for organisation in user.organisations:
+        org_datum = {
+                'OrgId': organisation.orgId
+                'name': organisation.name
+                'description': organisation.description
+                }
+    organisation_data.append(org_datum)
+    
+    return jsonify({
+        'status': 'success',
+        'message': 'API request was successful',
+        'data': {
+            'organisations': organisation_data
+            }
+
+        }), 200
+
+
+
+
+
