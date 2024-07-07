@@ -173,8 +173,51 @@ def create_organisation():
             }), 400
 
 
+@app_views.route('/api/organisations/<orgId>/users', methods=['POST'], strict_slashes=False)
+def add_user_to_organisation(org_id):
+    """
+    Adds a user to a organisation
+    """
+    data = request.get_json()
+    errors = []
 
+    user_id = data['userId']
+    if not user_id:
+        errors.append({'field': 'userId', 'message': 'Please enter the user id'})
 
+    if errors:
+        return jsonify({'errors': errors}), 422
+
+    organisation = Organisation.query.filter_by(orgId=org_id).first()
+    if not organisation:
+        return jsonify({
+            'status': 'Bad request',
+            'message': 'Organisation not found',
+            'statusCode': 401
+            }), 401
+
+    user = User.query.filter_by(userId=user_id).first()
+    if not user:
+        return jsonify({
+            'status': 'Bad request',
+            'message': 'User not found',
+            'statusCode': 401
+            }), 401
+    
+    if user in user.organisations:
+        return jsonify({
+            'status': 'Bad request',
+            'message': 'User is already in this organisation',
+            'statusCode': 401
+            }), 401
+
+    organisation.users.append(user)
+    db.session.commit()
+
+    return jsonify({
+        'status': 'success',
+        'message': 'User added to organisation successfully'
+        }), 201
 
 
 
