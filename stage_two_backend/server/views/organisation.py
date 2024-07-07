@@ -16,12 +16,12 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 @app_views.route('/users/<id>', methods=['GET'], strict_slashes=False)
 @jwt_required()
-def get_user(user_id):
+def get_user(id):
     """
     Gets a user record
     protected route: user must be authenticated
     """
-    if not user_id:
+    if not id:
         return jsonify({
             'status': 'Bad request',
             'message': 'Please include the user id',
@@ -31,17 +31,10 @@ def get_user(user_id):
     current_user_id = get_jwt_identity()
 
     user = User.query.filter_by(userId=current_user_id).first() 
-    if not user or current_user_id != user_id:
+    if not user or current_user_id != id:
         return jsonify({
             'status': 'Bad request',
             'message': 'User not found',
-            'statusCode': 401
-            }), 401
-
-    if current_user_id != user_id:
-        return jsonify({
-            'status': 'Bad request',
-            'message': 'Access denied',
             'statusCode': 401
             }), 401
 
@@ -75,14 +68,17 @@ def get_organisation():
             'statusCode': 401
             }), 401
 
+    print(user.organisations)
+
     organisation_data = []
     for organisation in user.organisations:
         org_datum = {
-                'OrgId': organisation.orgId
-                'name': organisation.name
+                'OrgId': organisation.orgId,
+                'name': organisation.name,
                 'description': organisation.description
                 }
-    organisation_data.append(org_datum)
+        organisation_data.append(org_datum)
+    print(organisation_data)
     
     return jsonify({
         'status': 'success',
@@ -95,14 +91,14 @@ def get_organisation():
 
 @app_views.route('/organisations/<orgId>', methods=['GET'], strict_slashes=False)
 @jwt_required()
-def get_organisation_by_id(org_id):
+def get_organisation_by_id(orgId):
     """
     Get an organisation by the orgId
     user must be authenticated
     """
     current_user_id = get_jwt_identity()
 
-    organisation = Organisation.query.filter_by(orgId=org_id).first()
+    organisation = Organisation.query.filter_by(orgId=orgId).first()
     if not organisation:
         return jsonify({
             'status': 'Bad request',
@@ -110,10 +106,10 @@ def get_organisation_by_id(org_id):
             'statusCode': 401
             }), 401
     
-    user = User.query.filter_by(userId=current_user.id).first()
+    user = User.query.filter_by(userId=current_user_id).first()
     if user:
         for orgs in user.organisations:
-            if org_id == orgs.orgId:
+            if orgId == orgs.orgId:
                 return jsonify ({
                     'status': 'success',
                     'message': 'API request successful',
@@ -150,11 +146,11 @@ def create_organisation():
     if errors:
         return jsonify({'errors': errors}), 422
 
-    new_organisation = Organisation(name=orgname, description=org_descriptioni)
+    new_organisation = Organisation(name=org_name, description=org_description)
 
     user = User.query.filter_by(userId=current_user_id).first()
     if user:
-        new_organisation.append(user)
+        new_organisation.users.append(user)
         db.session.add(new_organisation)
         db.session.commit()
         return jsonify({
@@ -175,7 +171,7 @@ def create_organisation():
 
 
 @app_views.route('/api/organisations/<orgId>/users', methods=['POST'], strict_slashes=False)
-def add_user_to_organisation(org_id):
+def add_user_to_organisation(orgId):
     """
     Adds a user to a organisation
     """
@@ -189,7 +185,7 @@ def add_user_to_organisation(org_id):
     if errors:
         return jsonify({'errors': errors}), 422
 
-    organisation = Organisation.query.filter_by(orgId=org_id).first()
+    organisation = Organisation.query.filter_by(orgId=orgId).first()
     if not organisation:
         return jsonify({
             'status': 'Bad request',

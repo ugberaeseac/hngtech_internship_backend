@@ -17,7 +17,7 @@ def login():
     """
     authenticates and log in an authorized user
     """
-    data - request.get_json()
+    data = request.get_json()
     errors = []
 
     email = data['email']

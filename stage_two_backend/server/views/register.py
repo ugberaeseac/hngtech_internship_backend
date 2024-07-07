@@ -45,8 +45,8 @@ def register():
         return jsonify({
             'status': 'Bad request',
             'message': 'Registration unsuccessful',
-            'statusCode': 401
-            }), 401
+            'statusCode': 400
+            }), 400
 
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     new_user = User(firstName=firstname,
@@ -64,7 +64,7 @@ def register():
     db.session.add(new_user)
     db.session.commit()
 
-    access_token = create_user_token(identity=new_user.userId)
+    access_token = create_access_token(identity=new_user.userId)
 
     return jsonify({
         'status': 'success',
