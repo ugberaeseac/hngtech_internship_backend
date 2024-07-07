@@ -7,7 +7,7 @@ displays an incorrect username/password message
 """
 
 from server import db, bcrypt
-from server.models import User
+from server.models import User, Organisation
 from server.views import app_views
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -18,6 +18,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 def get_user(user_id):
     """
     Gets a user record
+    protected route: user must be authenticated
     """
     if not user_id:
         return jsonify({
@@ -56,18 +57,19 @@ def get_user(user_id):
         }), 200
 
 
-@app_views.route('/organisations', methods=[], strict_slashes=False)
+@app_views.route('/organisations', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_organisation():
     """
     Gets the organisation(s) a user belongs to
+    protected route: user must be authenticated
     """
     current_user_id = get_jwt_identity()
     
     user = User.query.filter_by(userId=current_user_id).first()
     if not user:
         return jsonify({
-            'status': 'Bad request',
+            'status': 'Forbidden',
             'message': 'Access denied',
             'statusCode': 401
             }), 401
@@ -87,10 +89,52 @@ def get_organisation():
         'data': {
             'organisations': organisation_data
             }
-
         }), 200
 
 
+@app_views.route('/organisations/<orgId>', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_organisation_by_id(org_id):
+    """
+    Get an organisation by the orgId
+    user must be authenticated
+    """
+    current_user_id = get_jwt_identity()
+
+    organisation = Organisation.query.filter_by(orgId=org_id).first()
+    if not organisation:
+        return jsonify({
+            'status': 'Bad request',
+            'message': 'Organisation not found',
+            'statusCode': 401
+            }), 401
+    
+    user = User.query.filter_by(userId=current_user.id).first()
+    if user:
+        for orgs in user.organisations:
+            if org_id == orgs.orgId:
+                return jsonify ({
+                    'status': 'success',
+                    'message': 'API request successful',
+                    'data': {
+                        'orgId': orgs.orgId,
+                        'name': orgs.name,
+                        'description': orgs.description
+                        }
+                    }), 201
+    else:
+        return jsonify({
+            'status': 'Forbidden',
+            'message': 'Access denied',
+            'statusCode': 401
+            }), 401
 
 
+@app_views.route('/', methods=['POST'], strict_slashes=False)
+@jwt_required()
+def create_organisation():
+    """
+    create an organisation
+    protected route: user must be authenticated
+    """
 
