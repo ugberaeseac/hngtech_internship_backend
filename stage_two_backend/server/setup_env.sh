@@ -1,4 +1,5 @@
-etup env variables
+#!/usr/bin/env bash
+# setup env variables
 
 
 export HANDSHAKE_MYSQL_HOST="localhost"
