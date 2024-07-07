@@ -7,7 +7,8 @@ displays an incorrect username/password message
 """
 
 from server import db, bcrypt
-from server.models import User, Organisation
+from server.models.user import User
+from server.models.organisation import Organisation
 from server.views import app_views
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity

@@ -6,12 +6,13 @@ return payload if success else error
 """
 
 from server import app, db, bcrypt
-from server.models import User, Organisation
+from server.models.user import User
+from server.models.organisation import Organisation
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token
 
 
-@app.route('auth/register', methods=['POST'], strict_slashes=False)
+@app.route('/auth/register', methods=['POST'], strict_slashes=False)
 def register():
     """
     creates a new user
@@ -41,7 +42,11 @@ def register():
 
     user = User.query.filter_by(email=email).first()
     if user:
-        return jsonify({'field': 'email', 'message': 'email is already taken, please enter a different email'}), 422
+        return jsonify({
+            'status': 'Bad request',
+            'message': 'Registration unsuccessful'
+            'statusCode': 401
+            }), 401
 
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     new_user = User(firstName=firstname,
@@ -54,33 +59,25 @@ def register():
     new_organisation = Organisation(name=organisation_name,
                                     description=f'This is the description of {organisation_name}'
                     )
-    new_user.organisation.append(new_organisation)
+    new_user.organisations.append(new_organisation)
 
-    try:
-        db.session.add(new_user)
-        db.session.add(new_organisation)
-        db.session.commit()
+    db.session.add(new_user)
+    db.session.commit()
 
-        access_token = create_user_token(identity=new_user.userId)
+    access_token = create_user_token(identity=new_user.userId)
 
-        return jsonify({
-            'status': 'success',
-            'message': 'Registration successful',
-            'data': {
-            'accessToken': access_token,
-            'user': {
-    	    'userId': new_user.userId,
-	        'firstName': new_user.firstName,
-    		'lastName': new_user.lastName,
-	    	'email': new_user.email,
-		    'phone': new_user.phone,
-            }
-          }
-        }), 201
-    except Exception:
-        return jsonify({
-            'status': 'Bad request',
-            'message': 'Registration unsuccessful',
-            'statusCode': 400
-            }), 400
+    return jsonify({
+        'status': 'success',
+        'message': 'Registration successful',
+        'data': {
+        'accessToken': access_token,
+        'user': {
+    	'userId': new_user.userId,
+	    'firstName': new_user.firstName,
+    	'lastName': new_user.lastName,
+	    'email': new_user.email,
+		'phone': new_user.phone,
+        }
+    }
+    }), 201
 

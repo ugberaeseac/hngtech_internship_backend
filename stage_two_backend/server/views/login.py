@@ -7,7 +7,7 @@ displays an incorrect username/password message
 """
 
 from server import app, db, bcrypt
-from server.models import User
+from server.models.user import User
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token
 
@@ -33,7 +33,7 @@ def login():
     user = User.query.filter_by(email=email).first()
     if user and bcrypt.check_password_hash(user.password, password):
         access_token = create_access_token(identity=user.userId)
-    	return jsonify({
+        return jsonify({
             'status': 'success',
             'message': 'Login successful',
             'data': {
