@@ -44,7 +44,7 @@ def register():
     if user:
         return jsonify({
             'status': 'Bad request',
-            'message': 'Registration unsuccessful'
+            'message': 'Registration unsuccessful',
             'statusCode': 401
             }), 401
 
