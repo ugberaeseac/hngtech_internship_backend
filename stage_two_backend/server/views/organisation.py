@@ -130,11 +130,52 @@ def get_organisation_by_id(org_id):
             }), 401
 
 
-@app_views.route('/', methods=['POST'], strict_slashes=False)
+@app_views.route('/organisations', methods=['POST'], strict_slashes=False)
 @jwt_required()
 def create_organisation():
     """
     create an organisation
     protected route: user must be authenticated
     """
+    current_user_id = get_jwt_identity()
+    data = request.get_json()
+    errors = []
+
+    org_description = data['description']
+    org_name = data['name']
+    if not org_name:
+        errors.append({'field': 'name', 'message': 'Please enter the name of the organisation'})
+
+    if errors:
+        return jsonify({'errors': errors}), 422
+
+    new_organisation = Organisation(name=orgname, description=org_descriptioni)
+
+    user = User.query.filter_by(userId=current_user_id).first()
+    if user:
+        new_organisation.append(user)
+        db.session.add(new_organisation)
+        db.session.commit()
+        return jsonify({
+            'status': 'success',
+            'message': 'Organisation created successfully',
+            'data': {
+                'orgId': new_organisation.orgId,
+                'name': new_organisation.name,
+                'description': new_organisation.description
+                }
+            }), 201
+    else:
+        return jsonify({
+            'status': 'Bad request',
+            'message': 'Client error',
+            'statusCode': 400
+            }), 400
+
+
+
+
+
+
+
 
