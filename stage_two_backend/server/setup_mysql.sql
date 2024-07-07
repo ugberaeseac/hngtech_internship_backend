@@ -1,4 +1,4 @@
---Create a test database
+-- Create a test database
 -- This script prepares a dev database for the HNG stage-two backend project task
 
 CREATE DATABASE IF NOT EXISTS hng_test_db;
