@@ -13,10 +13,10 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 
 
-HNG_MYSQL_HOST = os.environ.get('HNG_MYSQL_HOST')
-HNG_MYSQL_DB = os.environ.get('HNG_MYSQL_DB')
-HNG_MYSQL_USER = os.environ.get('HNG_MYSQL_USER')
-HNG_MYSQL_PWD = os.environ.get('HNG_MYSQL_PWD')
+HNG_MYSQL_HOST = 'localhost'
+HNG_MYSQL_DB = 'hng_test_db'
+HNG_MYSQL_USER = 'hng_test'
+HNG_MYSQL_PWD = 'hng_test_pwd'
 HNG_MYSQL_ENV = os.environ.get('HNG_MYSQL_ENV')
 
 
