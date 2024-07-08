@@ -26,8 +26,8 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_hex()
 app.config["JWT_SECRET_KEY"] = secrets.token_hex()
 app.config['JWT_TOKEN_LOCATION'] = ['headers']
-app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{HNG_MYSQL_USER}:{HNG_MYSQL_PWD}@{HNG_MYSQL_HOST}:3306/{HNG_MYSQL_DB}'
 #app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{HNG_MYSQL_USER}:{HNG_MYSQL_PWD}@{HNG_MYSQL_HOST}:3306/{HNG_MYSQL_DB}'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{HNG_MYSQL_USER}:{HNG_MYSQL_PWD}@{HNG_MYSQL_HOST}:5432/{HNG_MYSQL_DB}'
 
 
 db = SQLAlchemy(app)

@@ -68,7 +68,6 @@ def get_organisation():
             'statusCode': 401
             }), 401
 
-    print(user.organisations)
 
     organisation_data = []
     for organisation in user.organisations:
@@ -78,7 +77,6 @@ def get_organisation():
                 'description': organisation.description
                 }
         organisation_data.append(org_datum)
-    print(organisation_data)
     
     return jsonify({
         'status': 'success',
@@ -170,7 +168,7 @@ def create_organisation():
             }), 400
 
 
-@app_views.route('/api/organisations/<orgId>/users', methods=['POST'], strict_slashes=False)
+@app_views.route('/organisations/<orgId>/users', methods=['POST'], strict_slashes=False)
 def add_user_to_organisation(orgId):
     """
     Adds a user to a organisation
