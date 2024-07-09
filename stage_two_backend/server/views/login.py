@@ -3,7 +3,7 @@
 endpoint route to authenticate a user
 Authenticates a user and creates a JWT token
 if successful, returns the user id and access token else
-displays an incorrect username/password message
+displays an incorrect username/password message with error status
 """
 
 from server import app, db, bcrypt
