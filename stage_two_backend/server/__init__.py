@@ -28,7 +28,8 @@ app.config["JWT_SECRET_KEY"] = secrets.token_hex()
 app.config['JWT_TOKEN_LOCATION'] = ['headers']
 #app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{HNG_MYSQL_USER}:{HNG_MYSQL_PWD}@{HNG_MYSQL_HOST}:3306/{HNG_MYSQL_DB}'
 #app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{HNG_MYSQL_USER}:{HNG_MYSQL_PWD}@{HNG_MYSQL_HOST}:5432/{HNG_MYSQL_DB}'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://default:Pzlkx7btW5ds@ep-dawn-grass-a47mk6be-pooler.us-east-1.aws.neon.tech:5432/verceldb'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://default:Pzlkx7btW5ds@ep-dawn-grass-a47mk6be-pooler.us-east-1.aws.neon.tech:5432/verceldb'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://avnadmin:AVNS_mMfHhEkc961BguMIgn9@hngtest-db-ugberaeseac.k.aivencloud.com:14770/defaultdb?sslmode=require'
 
 
 db = SQLAlchemy(app)
