@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "server/app.py",
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "50mb" }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "server/app.py"
+    }
+  ],
+  "env": {
+    "FLASK_APP": "server/app.py",
+    "FLASK_ENV": "production",
+    "SECRET_KEY": "030b705c5504877832fb005da0569d3222abaeb86d0079b2430b535aefa595fb",
+    "HNG_MYSQL_HOST": "localhost",
+    "HNG_MYSQL_DB": "hng_test_db",
+    "HNG_MYSQL_USER": "hng_test",
+    "HNG_MYSQL_PWD": "hng_test_pwd",
+    "JWT_SECRET_KEY": "dde404370df2936800eb90f868eb92b1ff178e012c3f95a2a2f9e2de9c465a21" 
+  }
+}
