@@ -13,11 +13,12 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 
 
-HNG_MYSQL_HOST = 'localhost'
-HNG_MYSQL_DB = 'hng_test_db'
-HNG_MYSQL_USER = 'hng_test'
-HNG_MYSQL_PWD = 'hng_test_pwd'
-HNG_MYSQL_ENV = os.environ.get('HNG_MYSQL_ENV')
+#HNG_MYSQL_HOST = 'localhost'
+#HNG_MYSQL_DB = 'hng_test_db'
+#HNG_MYSQL_USER = 'hng_test'
+#HNG_MYSQL_PWD = 'hng_test_pwd'
+#HNG_MYSQL_ENV = os.environ.get('HNG_MYSQL_ENV')
+
 
 
 app = Flask(__name__)
@@ -27,9 +28,9 @@ app.config['SECRET_KEY'] = secrets.token_hex()
 app.config["JWT_SECRET_KEY"] = secrets.token_hex()
 app.config['JWT_TOKEN_LOCATION'] = ['headers']
 #app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{HNG_MYSQL_USER}:{HNG_MYSQL_PWD}@{HNG_MYSQL_HOST}:3306/{HNG_MYSQL_DB}'
-#app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{HNG_MYSQL_USER}:{HNG_MYSQL_PWD}@{HNG_MYSQL_HOST}:5432/{HNG_MYSQL_DB}'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{HNG_MYSQL_USER}:{HNG_MYSQL_PWD}@{HNG_MYSQL_HOST}:5432/{HNG_MYSQL_DB}?sslmode=require'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://default:Pzlkx7btW5ds@ep-dawn-grass-a47mk6be-pooler.us-east-1.aws.neon.tech:5432/verceldb'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://avnadmin:AVNS_mMfHhEkc961BguMIgn9@hngtest-db-ugberaeseac.k.aivencloud.com:14770/defaultdb?sslmode=require'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://avnadmin:AVNS_mMfHhEkc961BguMIgn9@hngtest-db-ugberaeseac.k.aivencloud.com:14770/defaultdb?sslmode=require'
 
 
 db = SQLAlchemy(app)
